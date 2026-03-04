@@ -40,6 +40,15 @@ app.use(express.json());
 // Make io accessible inside routes
 app.set('io', io);
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({
+    message: 'LifeFlow backend is running',
+    api: '/api',
+    health: '/api/health'
+  });
+});
+
 // ===== API ROUTES =====
 app.use('/api/auth', authRoutes);
 app.use('/api/search', searchRoutes);

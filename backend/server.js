@@ -53,6 +53,14 @@ app.use('/api/routes', routeTools);
 /* ✅ WBC IMAGE PREDICTION */
 app.use('/api/wbc', wbcRoutes);
 
+// Base API route
+app.get('/api', (req, res) => {
+  res.json({
+    message: 'LifeFlow API is running',
+    health: '/api/health'
+  });
+});
+
 // ===== HEALTH CHECK =====
 app.get('/api/health', (req, res) => {
   res.json({

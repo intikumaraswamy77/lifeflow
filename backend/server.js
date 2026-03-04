@@ -97,10 +97,7 @@ app.use((req, res) => {
 // ===== DATABASE CONNECTION =====
 mongoose.connect(
   process.env.MONGODB_URI || 'mongodb://localhost:27017/blood-donation',
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
+
 )
 .then(() => {
   console.log('Connected to MongoDB');

@@ -69,12 +69,14 @@ const Search = () => {
       console.error('Location detection error:', error);
       let errorMessage = 'Failed to detect location. ';
       
-      if (error.code === error.PERMISSION_DENIED) {
-        errorMessage += 'Please enable location permissions in your browser settings.';
-      } else if (error.code === error.POSITION_UNAVAILABLE) {
+      if (error.code === 'PERMISSION_DENIED') {
+        errorMessage += 'You denied location permission. Please allow location access for this site in your browser settings and try again.';
+      } else if (error.code === 'POSITION_UNAVAILABLE') {
         errorMessage += 'Location information is unavailable. Please try again or enter manually.';
-      } else if (error.code === error.TIMEOUT) {
+      } else if (error.code === 'TIMEOUT') {
         errorMessage += 'Location request timed out. Please try again.';
+      } else if (error.code === 'UNSUPPORTED') {
+        errorMessage += 'Geolocation is not supported by your browser/device.';
       } else {
         errorMessage += 'Please enter your location manually.';
       }

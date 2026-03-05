@@ -5,6 +5,9 @@ const http = require('http');
 const socketIo = require('socket.io');
 require('dotenv').config();
 
+// Suppress TensorFlow oneDNN messages
+process.env.TF_ENABLE_ONEDNN_OPTS = '0';
+
 // ===== ROUTES IMPORT =====
 const authRoutes = require('./routes/auth');
 const searchRoutes = require('./routes/search');

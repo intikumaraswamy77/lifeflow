@@ -2,7 +2,7 @@ const { execFile } = require("child_process");
 const path = require("path");
 const fs = require("fs");
 
-const PYTHON_PATH = "python"; 
+const PYTHON_PATH = process.platform === 'win32' ? 'python' : 'python3'; 
 // 🔴 If this fails, replace with full path like:
 // "C:\\Users\\YourName\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"
 
@@ -27,10 +27,11 @@ const predictWBC = (req, res) => {
 
       if (err) {
         console.error("❌ Python execution error:", err.message);
-        console.error("stderr:", stderr);
+        if (stderr) console.error("stderr:", stderr);
         return res.status(500).json({
           success: false,
-          error: "Python execution failed",
+          error: `Python execution failed: ${err.message}`,
+          details: stderr
         });
       }
 
@@ -40,11 +41,12 @@ const predictWBC = (req, res) => {
           success: true,
           prediction,
         });
-      } catch {
+      } catch (parseErr) {
         console.error("❌ Invalid Python output:", stdout);
         return res.status(500).json({
           success: false,
           error: "Invalid prediction format from model",
+          raw_output: stdout
         });
       }
     }

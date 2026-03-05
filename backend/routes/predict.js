@@ -18,7 +18,13 @@ function runPy(args = []) {
     proc.stderr.on("data", (d) => (err += d.toString()));
 
     proc.on("close", (code) => {
-      if (code !== 0) return reject(new Error(err || `python exited ${code}`));
+      if (code !== 0) {
+        // Check for missing dependencies
+        if (err.includes('No module named') || err.includes('ModuleNotFoundError')) {
+          return reject(new Error(`Missing dependencies: ${err}`));
+        }
+        return reject(new Error(err || `python exited ${code}`));
+      }
       try {
         const parsed = JSON.parse(out.trim());
         resolve(parsed);
@@ -91,8 +97,22 @@ router.post(
           recommendations
         }
       });
-    } catch (e) {
-      res.status(500).json({ success: false, error: e.message });
+    } catch (error) {
+      console.error("Prediction error:", error.message);
+      
+      // Check for missing dependencies
+      if (error.message.includes('Missing dependencies')) {
+        return res.status(503).json({
+          success: false,
+          error: "Disease prediction requires machine learning libraries (NumPy, pandas, scikit-learn) that are not available on the current hosting platform.",
+          suggestion: "This feature works in local development but requires a different hosting platform with Python < 3.14."
+        });
+      }
+      
+      res.status(500).json({
+        success: false,
+        error: "Prediction service temporarily unavailable"
+      });
     }
   }
 );

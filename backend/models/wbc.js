@@ -15,7 +15,7 @@ const predictWBC = (req, res) => {
   }
 
   const imagePath = path.resolve(req.file.path);
-  const scriptPath = path.resolve(__dirname, "../ml/predict_wbc_simple.py");
+  const scriptPath = path.resolve(__dirname, "../ml/predict_wbc.py");
 
   execFile(
     PYTHON_PATH,
@@ -36,7 +36,7 @@ const predictWBC = (req, res) => {
       }
 
       try {
-        const prediction = JSON.parse(stdout);
+        const prediction = JSON.parse(stdout.trim());
         return res.json({
           success: true,
           prediction,

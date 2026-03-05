@@ -21,7 +21,7 @@ MODEL_PATH = os.path.join(BASE_DIR, "wbc_classification_model.keras")
 try:
     model = tf.keras.models.load_model(MODEL_PATH)
 except Exception as e:
-    print(json.dumps({"error": f"Model load failed: {str(e)}", "traceback": traceback.format_exc()}))
+    print(json.dumps({"error": f"Model load failed: {str(e)}"}))
     sys.exit(1)
 
 # =========================
@@ -31,24 +31,21 @@ def predict(image_path):
     try:
         img = Image.open(image_path).convert("RGB")
         img = img.resize((IMG_SIZE, IMG_SIZE))
-    except Exception as e:
-        print(json.dumps({"error": f"Image processing failed: {str(e)}", "traceback": traceback.format_exc()}))
-        raise
 
-    img_array = np.array(img) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
+        img_array = np.array(img) / 255.0
+        img_array = np.expand_dims(img_array, axis=0)
 
-    try:
         preds = model.predict(img_array, verbose=0)[0]
         idx = int(np.argmax(preds))
-    except Exception as e:
-        print(json.dumps({"error": f"Prediction failed: {str(e)}", "traceback": traceback.format_exc()}))
-        raise
 
-    return {
-        "class": CLASSES[idx],
-        "confidence": round(float(preds[idx]) * 100, 2)
-    }
+        return {
+            "class": CLASSES[idx],
+            "confidence": round(float(preds[idx]) * 100, 2)
+        }
+        
+    except Exception as e:
+        print(json.dumps({"error": f"Prediction failed: {str(e)}"}))
+        raise
 
 # =========================
 # ENTRY POINT
@@ -64,5 +61,5 @@ if __name__ == "__main__":
         result = predict(image_path)
         print(json.dumps(result))
     except Exception as e:
-        print(json.dumps({"error": f"Prediction failed: {str(e)}", "traceback": traceback.format_exc()}))
+        print(json.dumps({"error": f"Prediction failed: {str(e)}"}))
         sys.exit(1)

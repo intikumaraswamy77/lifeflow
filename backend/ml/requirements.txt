@@ -1,6 +1,7 @@
-numpy
-pandas
-scikit-learn
-joblib
-openpyxl
-Pillow
+numpy<2.0
+pandas<2.0
+scikit-learn<2.0
+joblib<2.0
+openpyxl<4.0
+Pillow<10.0
+tensorflow==2.8.0

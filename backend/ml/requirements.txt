@@ -4,4 +4,9 @@ scikit-learn>=1.1.0,<1.3.0
 joblib>=1.1.0,<1.3.0
 openpyxl>=3.0.0,<3.2.0
 Pillow>=8.0.0,<10.0.0
-tensorflow==2.8.0
+# TensorFlow requires Python < 3.12 - Render uses Python 3.14
+# To enable WBC prediction on Render, you have these options:
+# 1. Use a different hosting platform (Railway, Heroku, AWS)
+# 2. Contact Render support for Python 3.11/3.10
+# 3. Create a separate microservice for WBC prediction
+# tensorflow==2.8.0

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Button } from "../components/ui/button";
 import { Loader2, Upload, Image as ImageIcon } from "lucide-react";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export default function WBCPredictionPage() {
   const [image, setImage] = useState(null);
@@ -35,7 +35,7 @@ export default function WBCPredictionPage() {
       const formData = new FormData();
       formData.append("image", image);
 
-      const response = await fetch(`${API_BASE}/api/wbc/predict`, {
+      const response = await fetch(`${API_BASE}/wbc/predict`, {
         method: "POST",
         body: formData,
       });

@@ -5,7 +5,7 @@ import { Input } from "../components/ui/input";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "../components/ui/select";
 import { Loader2, CheckCircle, AlertTriangle } from "lucide-react";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export default function PredictionPage() {
   const [form, setForm] = useState({
@@ -27,7 +27,7 @@ export default function PredictionPage() {
     setError("");
     setResult(null);
     try {
-      const r = await fetch(`${API_BASE}/api/predict`, {
+      const r = await fetch(`${API_BASE}/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

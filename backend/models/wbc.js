@@ -14,43 +14,14 @@ const predictWBC = (req, res) => {
     });
   }
 
-  const imagePath = path.resolve(req.file.path);
-  const scriptPath = path.resolve(__dirname, "../ml/predict_wbc.py");
+  // Cleanup uploaded file immediately since TensorFlow is not available
+  try { fs.unlinkSync(req.file.path); } catch {}
 
-  execFile(
-    PYTHON_PATH,
-    [scriptPath, imagePath],
-    { timeout: 20000 },
-    (err, stdout, stderr) => {
-      // cleanup image
-      try { fs.unlinkSync(imagePath); } catch {}
-
-      if (err) {
-        console.error("❌ Python execution error:", err.message);
-        if (stderr) console.error("stderr:", stderr);
-        return res.status(500).json({
-          success: false,
-          error: `Python execution failed: ${err.message}`,
-          details: stderr
-        });
-      }
-
-      try {
-        const prediction = JSON.parse(stdout);
-        return res.json({
-          success: true,
-          prediction,
-        });
-      } catch (parseErr) {
-        console.error("❌ Invalid Python output:", stdout);
-        return res.status(500).json({
-          success: false,
-          error: "Invalid prediction format from model",
-          raw_output: stdout
-        });
-      }
-    }
-  );
+  return res.status(503).json({
+    success: false,
+    error: "WBC prediction is temporarily unavailable due to TensorFlow compatibility issues. Please try the basic disease prediction instead.",
+    alternative: "Use the Disease Prediction feature which is working correctly"
+  });
 };
 
 module.exports = { predictWBC };

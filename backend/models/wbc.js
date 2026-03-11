@@ -28,16 +28,6 @@ const predictWBC = (req, res) => {
       if (err) {
         console.error("❌ Python execution error:", err.message);
         if (stderr) console.error("stderr:", stderr);
-        
-        // Check for missing dependencies
-        if (stderr.includes('No module named') || stderr.includes('ModuleNotFoundError')) {
-          return res.status(503).json({
-            success: false,
-            error: "WBC prediction requires machine learning libraries (NumPy, TensorFlow) that are not available on the current hosting platform. Please try the basic disease prediction instead.",
-            suggestion: "This feature works in local development but requires a different hosting platform with Python < 3.14."
-          });
-        }
-        
         return res.status(500).json({
           success: false,
           error: `Python execution failed: ${err.message}`,

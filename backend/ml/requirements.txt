@@ -1,6 +1,7 @@
-# Minimal requirements for Python 3.14 compatibility
-# If this still fails, Python 3.14 is not supported for ML workloads
+numpy
+pandas
+scikit-learn
 joblib
+openpyxl
 Pillow
-
-# Alternative: Move to Railway, Heroku, or AWS for Python 3.11 support
+tensorflow

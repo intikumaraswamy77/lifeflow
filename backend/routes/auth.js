@@ -45,7 +45,7 @@ function buildGeoLocationFromPayload(payload) {
 
 // Generate JWT token
 const generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '30d' });
 };
 
 // Generate eligibility token (temporary, short-lived)
@@ -384,6 +384,29 @@ router.put('/change-password', auth, async (req, res) => {
   } catch (error) {
     console.error('Password change error:', error);
     res.status(500).json({ message: 'Server error during password change' });
+  }
+});
+
+// Refresh token
+router.post('/refresh-token', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('-password');
+    const token = generateToken(user._id);
+    
+    res.json({ 
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        userType: user.userType,
+        bloodGroup: user.bloodGroup
+      }
+    });
+  } catch (error) {
+    console.error('Token refresh error:', error);
+    res.status(500).json({ message: 'Server error during token refresh' });
   }
 });
 

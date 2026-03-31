@@ -19,7 +19,7 @@ const upload = multer({
   },
 });
 
-// POST /api/wbc/predict - WBC image prediction
+// POST /api/wbc/predict
 router.post("/predict", upload.single("image"), predictWBC);
 
 module.exports = router;

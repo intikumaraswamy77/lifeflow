@@ -21,6 +21,9 @@ const pickupRoutes = require('./routes/pickups');
 /* ✅ WBC ROUTE */
 const wbcRoutes = require('./routes/wbc');
 
+/* ✅ HEALTH MONITORING */
+const healthRoutes = require('./routes/health');
+
 // Utils
 const exporter = require('./utils/exporter');
 
@@ -64,6 +67,9 @@ app.use('/api/routes', routeTools);
 
 /* ✅ WBC IMAGE PREDICTION */
 app.use('/api/wbc', wbcRoutes);
+
+/* ✅ HEALTH MONITORING */
+app.use('/api/health', healthRoutes);
 
 // Base API route
 app.get('/api', (req, res) => {
